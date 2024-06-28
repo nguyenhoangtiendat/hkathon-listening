@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
+import Head from 'next/head';
+import Link from 'next/link';
+import Footer from '../components/Footer';
 
 const ReadingPage = () => {
   const [paragraph, setParagraph] = useState('');
@@ -124,7 +127,7 @@ const ReadingPage = () => {
     stopSpeech();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/generate-reading-material', { model, task, difficulty });
+      const response = await axios.post('https://web-server-2-cnu6.onrender.com/api/generate-reading-material', { model, task, difficulty });
       const { paragraph, questions, answers } = response.data;
       setParagraph(paragraph);
       setQuestions(questions);
@@ -251,26 +254,7 @@ const ReadingPage = () => {
     <div className="flex flex-col">
       <Header />
       <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">IELTS Listening Practice</h1>
-        <div className="flex space-x-4">
-          <button 
-            onClick={() => fetchReadingMaterial('Multiple Choices')} 
-            disabled={loading} 
-            className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition duration-300 disabled:opacity-50"
-          >
-            {loading ? 'Generating...' : 'Multiple Choices'}
-          </button>
-        </div>
-
-        <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Difficulty</h2>
-          <select onChange={(e) => setDifficulty(e.target.value)} className="px-4 py-2 rounded bg-gray-300 text-black">
-            <option value="easy">Easy</option>
-            <option value="normal">Normal</option>
-            <option value="hard">Hard</option>
-            <option value="extremely">Extremely</option>
-          </select>
-        </div>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6">Multiple Choice</h1>
 
         <div className="mt-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Voice</h2>
@@ -301,11 +285,29 @@ const ReadingPage = () => {
         </div>
 
         <div className="mt-6">
+        <label htmlFor="difficulty" className="text-xl font-semibold text-gray-800 mb-2 block">Select Difficulty:</label>
+          <select onChange={(e) => setDifficulty(e.target.value)} className="px-4 py-2 rounded bg-gray-300 text-black">
+            <option value="easy">Easy</option>
+            <option value="normal">Normal</option>
+            <option value="hard">Hard</option>
+            <option value="extremely">Extremely</option>
+          </select>
+        </div>
+
+        <div className="mt-6">
+          <button 
+              onClick={() => fetchReadingMaterial('Multiple Choices')} 
+              disabled={loading} 
+              className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition duration-300 disabled:opacity-50"
+            >
+              {loading ? 'Generating...' : 'Generate Test'}
+          </button>
+          &nbsp;
           <button 
             onClick={handleStopOrContinueSpeech} 
             className={`px-6 py-3 rounded-md shadow-md ${speechActive ? 'bg-red-500 text-white' : 'bg-green-500 text-white'} hover:bg-red-600 transition duration-300`}
           >
-            {speechActive ? 'Stop Speaking' : 'Continue Speaking'}
+            {speechActive ? 'Stop Speaking' : 'Start Speaking'}
           </button>
         </div>
         
@@ -380,6 +382,7 @@ const ReadingPage = () => {
         </button>
       )}
       </div>
+      <Footer />
     </div>
   );
 };

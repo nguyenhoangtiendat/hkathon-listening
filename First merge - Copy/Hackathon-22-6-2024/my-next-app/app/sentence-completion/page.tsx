@@ -186,7 +186,7 @@ const ReadingPage = () => {
     setLoading(true);
     try {
       // Ensure the task parameter is included in the API request
-      const response = await axios.post('http://localhost:5000/api/generate-reading-material', { model, task });
+      const response = await axios.post('https://web-server-2-cnu6.onrender.com/api/generate-reading-material', { model, task });
       const { paragraph, questions, answers } = response.data;
       setParagraph(paragraph);
       setQuestions(questions);
@@ -252,22 +252,13 @@ const ReadingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col">
       <Header />
-      <div className="flex flex-col items-center mt-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">IELTS Listening Practice</h1>
+      <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Sentence Completion</h1>
         <div className="w-full max-w-screen-md">
           {!isTouched && (
             <div className="flex flex-col items-center">
-              <div className="py-6">
-                <button
-                  onClick={() => fetchReadingMaterial('Sentence Completion')} 
-                  disabled={loading}
-                  className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition duration-300 disabled:opacity-50"
-                >
-                  {loading ? 'Generating...' : 'Sentence Completion'}
-                </button>
-              </div>
               <div className="mt-6">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Select Voice</h2>
                 <select onChange={handleSelectVoice} className="px-4 py-2 rounded bg-gray-300 text-black">
@@ -306,12 +297,20 @@ const ReadingPage = () => {
               </div>
 
               <div className="mt-6">
+              <button
+                  onClick={() => fetchReadingMaterial('Sentence Completion')} 
+                  disabled={loading}
+                  className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 transition duration-300 disabled:opacity-50"
+                >
+                  {loading ? 'Generating...' : 'Generate Test'}
+                </button>
+                &nbsp;
                 <button
                   onClick={handleStopOrContinueSpeech}
                   disabled={loading}
                   className={`px-6 py-3 rounded-md shadow-md ${speechActive ? 'bg-red-500 text-white' : 'bg-green-500 text-white'} hover:bg-red-600 transition duration-300`}
                 >
-                  {loading ? 'Generating...' : (speechActive ? 'Stop Speaking' : 'Continue Speaking')}
+                  {loading ? 'Generating...' : (speechActive ? 'Stop Speaking' : 'Start Speaking')}
                 </button>
               </div>
               {paragraph && (
